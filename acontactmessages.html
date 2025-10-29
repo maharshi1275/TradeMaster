@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeMaster - Contact Messages</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a237e;
+      --secondary: #283593;
+      --accent: #00c853;
+      --light-bg: #f5f7fa;
+      --dark-text: #263238;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark-text);
+      background-color: var(--light-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+    }
+
+    .navbar {
+      background-color: var(--primary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      color: #fff !important;
+      font-weight: 700;
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.85) !important;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: white !important;
+    }
+
+    .nav-link.logout {
+      color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    .nav-link.logout:hover {
+      color: #ff6b6b !important;
+    }
+
+    .page-section {
+      padding: 40px 0;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      background-color: white;
+      border-bottom: 1px solid #eee;
+      padding: 15px 20px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      border-color: var(--accent);
+      padding: 10px 25px;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background-color: #00b34a;
+      border-color: #00b34a;
+    }
+
+    .message-item {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .message-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .message-item.unread {
+      background-color: #e3f2fd;
+      border-left: 3px solid var(--primary);
+    }
+
+    .message-sender {
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .message-email {
+      color: #666;
+      font-size: 0.85rem;
+      margin-left: 10px;
+    }
+
+    .message-subject {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--dark-text);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .message-preview {
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .message-date {
+      font-size: 0.75rem;
+      color: #6c757d;
+    }
+
+    .message-category {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      margin-right: 8px;
+      white-space: nowrap;
+    }
+
+    .category-support {
+      background-color: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .category-suggestion {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .category-bug {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    .category-general {
+      background-color: #f3e5f5;
+      color: #7b1fa2;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-new {
+      background-color: #ffecb3;
+      color: #ff8f00;
+    }
+
+    .status-read {
+      background-color: #e0e0e0;
+      color: #616161;
+    }
+
+    .status-replied {
+      background-color: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .stats-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+      margin-bottom: 15px;
+    }
+
+    .stats-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .stats-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      padding: 20px 0;
+      margin-top: auto;
+      text-align: center;
+      width: 100%;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .footer-links a:hover {
+      color: white;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .card-header .d-flex {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-header .input-group {
+        width: 100% !important;
+      }
+
+      .message-sender {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .message-email {
+        margin-left: 0;
+        margin-top: 5px;
+      }
+
+      .message-subject {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .message-category {
+        margin-bottom: 5px;
+      }
+
+      .d-flex.justify-content-between.align-items-center {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+
+      .status-badge {
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .page-section {
+        padding: 20px 0;
+      }
+
+      .card-body {
+        padding: 15px;
+      }
+
+      .message-item {
+        padding: 12px;
+      }
+
+      .stats-value {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #444;
+      animation: fade 1.5s infinite;
+    }
+
+    @keyframes fade {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="loader-container">
+    <lottie-player src="graphloader.json" background="transparent" speed="2" style="width: 220px; height: 220px;" loop
+      autoplay></lottie-player>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="aserach2.html"><i class="fas fa-chart-line me-2"></i>TradeMaster</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="aserach2.html"><i class="fas fa-user me-1"></i>Client
+              Search</a></li>
+          <li class="nav-item"><a class="nav-link" href="auserprofile2.html"><i class="fas fa-chart-bar me-1"></i>
+              User Details</a></li>
+
+          <li class="nav-item"><a class="nav-link active" href="acontactmessages.html"><i
+                class="fas fa-envelope me-1"></i> Contact Messages</a></li>
+          <li class="nav-item"><a class="nav-link" href="ahq.html"><i class="fas fa-building me-1"></i> HQ Messages</a>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="anotifications.html"><i class="fas fa-bell me-1"></i>
+              Notifications</a></li>
+          <li class="nav-item"><a class="nav-link logout" href="aadmin.html"><i class="fas fa-sign-out-alt me-1"></i>
+              Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <section class="page-section">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-column flex-md-row">
+              <h4 class="mb-3 mb-md-0">Contact Messages</h4>
+              <div class="d-flex flex-column flex-sm-row w-100 w-md-auto">
+                <div class="input-group me-0 me-sm-2 mb-2 mb-sm-0 flex-grow-1">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  <input type="text" class="form-control" placeholder="Search messages...">
+                </div>
+                <button class="btn btn-primary"><i class="fas fa-filter me-2"></i> Filter</button>
+              </div>
+            </div>
+            <div class="card-body">
+
+              <div class="row mb-4">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="stats-card">
+                    <div class="stats-value">24</div>
+                    <div class="stats-label">Total Messages</div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="stats-card">
+                    <div class="stats-value">8</div>
+                    <div class="stats-label">Unread Messages</div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="stats-card">
+                    <div class="stats-value">12</div>
+                    <div class="stats-label">Support Requests</div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="stats-card">
+                    <div class="stats-value">7</div>
+                    <div class="stats-label">Pending Replies</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                  <h5 class="mb-3">Message List</h5>
+
+
+                  <div class="message-item unread" data-bs-toggle="modal" data-bs-target="#messageModal">
+                    <div class="message-sender">
+                      David Miller
+                      <span class="message-email">david.miller@example.com</span>
+                    </div>
+                    <div class="message-subject">
+                      <span class="message-category category-support">Support</span>
+                      Withdrawal Issue - Transaction Pending
+                    </div>
+                    <div class="message-preview">
+                      I'm having trouble withdrawing funds from my account. The transaction has been pending for 3 days
+                      now and I haven't received any update...
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                      <span class="message-date">Jun 12, 2023 • 10:24 AM</span>
+                      <span class="status-badge status-new">New</span>
+                    </div>
+                  </div>
+
+
+                  <div class="message-item" data-bs-toggle="modal" data-bs-target="#messageModal">
+                    <div class="message-sender">
+                      Lisa Garcia
+                      <span class="message-email">lisa.garcia@example.com</span>
+                    </div>
+                    <div class="message-subject">
+                      <span class="message-category category-general">General</span>
+                      Futures Trading Availability
+                    </div>
+                    <div class="message-preview">
+                      I would like to know if you plan to add futures trading to your platform. I'm interested in
+                      expanding my trading strategies...
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                      <span class="message-date">Jun 9, 2023 • 3:45 PM</span>
+                      <span class="status-badge status-read">Read</span>
+                    </div>
+                  </div>
+
+
+                  <div class="message-item unread" data-bs-toggle="modal" data-bs-target="#messageModal">
+                    <div class="message-sender">
+                      Kevin Patel
+                      <span class="message-email">kevin.patel@example.com</span>
+                    </div>
+                    <div class="message-subject">
+                      <span class="message-category category-suggestion">Suggestion</span>
+                      Export Trading History to CSV
+                    </div>
+                    <div class="message-preview">
+                      Could you add an option to export trading history to CSV format? This would be very helpful for
+                      tax purposes and personal record keeping...
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                      <span class="message-date">Jun 8, 2023 • 9:20 AM</span>
+                      <span class="status-badge status-replied">Replied</span>
+                    </div>
+                  </div>
+
+
+                  <nav aria-label="Message pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                      <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                      <li class="page-item"><a class="page-link" href="#">2</a></li>
+                      <li class="page-item"><a class="page-link" href="#">3</a></li>
+                      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                  </nav>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="mb-0">Message Categories</h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="list-group list-group-flush">
+                        <a href="#"
+                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center active">
+                          All Messages
+                          <span class="badge bg-primary rounded-pill">24</span>
+                        </a>
+                        <a href="#"
+                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                          <div>
+                            <span class="message-category category-support me-2">Support</span>
+                            Support Requests
+                          </div>
+                          <span class="badge bg-primary rounded-pill">12</span>
+                        </a>
+                        <a href="#"
+                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                          <div>
+                            <span class="message-category category-suggestion me-2">Suggestion</span>
+                            Feature Suggestions
+                          </div>
+                          <span class="badge bg-primary rounded-pill">7</span>
+                        </a>
+                        <a href="#"
+                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                          <div>
+                            <span class="message-category category-bug me-2">Bug</span>
+                            Bug Reports
+                          </div>
+                          <span class="badge bg-primary rounded-pill">3</span>
+                        </a>
+                        <a href="#"
+                          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                          <div>
+                            <span class="message-category category-general me-2">General</span>
+                            General Inquiries
+                          </div>
+                          <span class="badge bg-primary rounded-pill">2</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+
+  <footer>
+    <div class="container">
+      <p class="mb-0">&copy; 2023 TradeMaster. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <div class="modal fade" id="messageModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Message Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <div class="message-sender">
+              David Miller
+              <span class="message-email">david.miller@example.com</span>
+            </div>
+            <div class="message-subject mt-2">
+              <span class="message-category category-support">Support</span>
+              Withdrawal Issue - Transaction Pending
+            </div>
+            <div class="message-date mt-1">Jun 12, 2023 • 10:24 AM</div>
+          </div>
+
+          <div class="card mt-3">
+            <div class="card-body">
+              <h6>Message Content:</h6>
+              <p>Hello TradeMaster Team,</p>
+              <p>I'm having trouble withdrawing funds from my account. I initiated a withdrawal of ₹25,000 three days
+                ago, but the transaction is still showing as pending. I haven't received any update or notification
+                about the status.</p>
+              <p>Could you please look into this and let me know when the funds will be transferred to my bank account?
+                This is quite urgent as I need the funds for an important payment.</p>
+              <p>Thank you for your assistance.</p>
+              <p>Best regards,<br>David Miller</p>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <h6>Reply to this message:</h6>
+            <textarea class="form-control" rows="5" placeholder="Type your response here..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary"><i class="fas fa-reply me-2"></i> Send Response</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script>
+    window.addEventListener("load", function () {
+      const loader = document.querySelector(".loader-container");
+      setTimeout(() => {
+        if (loader) {
+          loader.style.opacity = "0";
+          setTimeout(() => {
+            loader.style.display = "none";
+            document.body.classList.add("loaded");
+          }, 800);
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+
+</html>

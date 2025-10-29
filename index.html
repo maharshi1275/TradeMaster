@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeMaster - Professional Trading Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+        html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #444;
+      animation: fade 1.5s infinite;
+    }
+
+    @keyframes fade {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+        :root {
+            --primary: #1a237e;
+            --secondary: #283593;
+            --accent: #00c853;
+            --light-bg: #f5f7fa;
+            --dark-text: #263238;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 50px;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            padding: 10px 25px;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: #00b34a;
+            border-color: #00b34a;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            background-color: rgba(0, 200, 83, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .feature-icon i {
+            color: var(--accent);
+            font-size: 30px;
+        }
+
+        .page-section {
+            padding: 80px 0;
+        }
+
+        .page-title {
+            margin-bottom: 40px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-right: 15px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .market-data {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-up {
+            color: var(--accent);
+        }
+
+        .price-down {
+            color: #f44336;
+        }
+
+        .chart-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .index-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .index-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .index-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .index-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .index-change {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .indices-section {
+            margin-top: 50px;
+        }
+        
+        
+        .footer-col {
+            margin-bottom: 30px;
+        }
+        
+        .footer-admin-section {
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-social-section {
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    
+  <div class="loader-container">
+    <lottie-player
+      src="graphloader.json"
+      background="transparent"
+      speed="2"
+      style="width: 220px; height: 220px;"
+      loop
+      autoplay>
+    </lottie-player>
+  </div>
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-chart-line me-2"></i>TradeMaster</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="umarkets.html"><i class="fas fa-coins me-1"></i> Markets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="utrading.html"><i class="fas fa-chart-bar me-1"></i> Trading</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="uaccount.html"><i class="fas fa-user me-1"></i> Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ucontact.html"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="uabout.html"><i class="fas fa-info-circle me-1"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div class="container">
+        <section class="page-section">
+            <div class="hero-section text-center rounded">
+                <div class="container">
+                    <h1>Trade Smarter, Not Harder</h1>
+                    <p class="lead mb-4">Access India's markets with our advanced trading platform. Start your journey to
+                        financial freedom today.</p>
+                    <a href="umarkets.html" class="btn btn-primary btn-lg">Let's Trade</a>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h4>Fast Execution</h4>
+                    <p>Trade with lightning-fast execution and minimal slippage on all your transactions.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h4>Secure Platform</h4>
+                    <p>Your funds and data are protected with bank-level security and encryption.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h4>Advanced Tools</h4>
+                    <p>Access powerful charting tools, indicators, and analytics for informed trading.</p>
+                </div>
+            </div>
+
+            
+            <div class="indices-section">
+                <h2 class="page-title text-center">Market Overview</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="index-card">
+                            <div class="index-name">NIFTY 50</div>
+                            <div class="index-value">22,415.65</div>
+                            <div class="index-change price-up">+0.85% <i class="fas fa-arrow-up"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="index-card">
+                            <div class="index-name">BANK NIFTY</div>
+                            <div class="index-value">48,210.35</div>
+                            <div class="index-change price-down">-0.42% <i class="fas fa-arrow-down"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="index-card">
+                            <div class="index-name">SENSEX</div>
+                            <div class="index-value">73,895.54</div>
+                            <div class="index-change price-up">+0.76% <i class="fas fa-arrow-up"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="index-card">
+                            <div class="index-name">GIFT NIFTY</div>
+                            <div class="index-value">22,530.80</div>
+                            <div class="index-change price-up">+0.92% <i class="fas fa-arrow-up"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 footer-col">
+                    <h5><i class="fas fa-chart-line me-2"></i>TradeMaster</h5>
+                    <p>Professional trading platform for modern investors. Trade Indian stocks, ETFs, and commodities with
+                        advanced tools and real-time analytics.</p>
+                </div>
+                <div class="col-md-2 footer-col">
+                    <h5>Quick Links</h5>
+                    <div class="footer-links">
+                        <a href="index.html">Home</a>
+                        <a href="uabout.html">About</a>
+                        <a href="umarkets.html">Markets</a>
+                        <a href="utrading.html">Trading</a>
+                        <a href="uaccount.html">Account</a>
+                    </div>
+                </div>
+                <div class="col-md-2 footer-col">
+                    <h5>Legal</h5>
+                    <div class="footer-links">
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Risk Disclosure</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+                <div class="col-md-2 footer-col footer-admin-section">
+                    <h5>For Admin</h5>
+                    <div class="footer-links">
+                        <a href="aadmin.html">Admin Login</a>
+                    </div>
+                </div>
+                <div class="col-md-3 footer-col footer-social-section">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex mt-3">
+                        <a href="#" class="me-3 text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center py-3">
+                <p class="mb-0">&copy; 2023 TradeMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <script>
+    window.addEventListener("load", function() {
+      const loader = document.querySelector(".loader-container");
+      const mainContent = document.getElementById("main-content");
+
+      setTimeout(() => {
+        loader.style.opacity = "0";
+        setTimeout(() => {
+          loader.style.display = "none";
+          mainContent.style.display = "block";
+          document.body.classList.add("loaded");
+        }, 800); // wait for fade out
+      }, 1000); // show loader for 2 seconds
+    });
+  </script>
+</body>
+
+</html>

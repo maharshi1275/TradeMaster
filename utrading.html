@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeMaster - Trading Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        
+        html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    .loader-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
+
+    .loading-text {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #444;
+      animation: fade 1.5s infinite;
+    }
+
+    @keyframes fade {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+        :root {
+            --primary: #1a237e;
+            --secondary: #283593;
+            --accent: #00c853;
+            --light-bg: #f5f7fa;
+            --dark-text: #263238;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            padding: 10px 25px;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            background-color: #00b34a;
+            border-color: #00b34a;
+        }
+        
+        .page-section {
+            padding: 80px 0;
+        }
+        
+        .page-title {
+            margin-bottom: 40px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .trading-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .trading-card h5 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .price-up {
+            color: var(--accent);
+        }
+        
+        .price-down {
+            color: #f44336;
+        }
+        
+        .btn-success {
+            background-color: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .btn-danger {
+            background-color: #f44336;
+            border-color: #f44336;
+        }
+        
+        .market-table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .market-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .trade-btn {
+            cursor: pointer;
+        }
+        
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .instrument-info {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .instrument-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .instrument-price {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .instrument-change {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .no-instrument {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        
+        .no-instrument i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #dee2e6;
+        }
+        
+        .buy-sell-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1050;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .buy-sell-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .popup-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .buy-sell-popup.show .popup-content {
+            transform: translateY(0);
+        }
+        
+        .popup-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .popup-body {
+            padding: 20px;
+        }
+        
+        .popup-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .holdings-list {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        
+        .holding-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .holding-item:last-child {
+            border-bottom: none;
+        }
+        
+        .holding-name {
+            font-weight: 500;
+        }
+        
+        .holding-quantity {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .holding-details {
+            text-align: right;
+        }
+        
+        .holding-value {
+            font-weight: 600;
+        }
+        
+        .holding-pnl {
+            font-size: 0.85rem;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        .sell-disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+        
+    <div class="loader-container">
+        <lottie-player
+            src="graphloader.json"
+            background="transparent"
+            speed="2"
+            style="width: 220px; height: 220px;"
+            loop
+            autoplay>
+        </lottie-player>
+    </div>
+
+    
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fas fa-chart-line me-2"></i>TradeMaster</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="umarkets.html"><i class="fas fa-coins me-1"></i> Markets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="utrading.html"><i class="fas fa-chart-bar me-1"></i> Trading</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="uaccount.html"><i class="fas fa-user me-1"></i> Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ucontact.html"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="uabout.html"><i class="fas fa-info-circle me-1"></i> About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div class="container">
+        <section class="page-section">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="instrument-info" id="instrumentInfo">
+                        <div class="no-instrument" id="noInstrument">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>No Instrument Selected</h4>
+                            <p>Go to the Markets page and click "Trade" on any instrument to start trading</p>
+                            <a href="umarkets.html" class="btn btn-primary mt-3">Go to Markets</a>
+                        </div>
+                        <div id="selectedInstrument" style="display: none;">
+                            <div class="instrument-name" id="selectedInstrumentName">Reliance Industries</div>
+                            <div class="instrument-price" id="selectedInstrumentPrice">₹2,415.65</div>
+                            <div class="instrument-change price-up" id="selectedInstrumentChange">₹+25.50 (+1.07%)</div>
+                            <div class="d-grid gap-2 mt-4">
+                                <button class="btn btn-success" id="buyBtnMain">Buy</button>
+                                <button class="btn btn-danger" id="sellBtnMain">Sell</button>
+                            </div>
+                            <div id="sellWarning" class="alert alert-warning mt-3" style="display: none;">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                You don't own this stock. You can only sell stocks that are in your portfolio.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="trading-card">
+                        <h5>Portfolio Summary</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Total Value:</span>
+                            <span id="portfolioTotalValue">₹1,24,567</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Today's P&L:</span>
+                            <span class="price-up" id="portfolioTodayPL">₹+2,345</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Total P&L:</span>
+                            <span class="price-up" id="portfolioTotalPL">₹+12,456</span>
+                        </div>
+                        
+                        <div class="holdings-list">
+                            <h6 class="mb-3">Current Holdings</h6>
+                            <div id="holdingsContainer">
+                                <div class="holding-item">
+                                    <div>
+                                        <div class="holding-name">Reliance Industries</div>
+                                        <div class="holding-quantity">10 shares</div>
+                                    </div>
+                                    <div class="holding-details">
+                                        <div class="holding-value">₹24,156</div>
+                                        <div class="holding-pnl price-up">+₹1,234</div>
+                                    </div>
+                                </div>
+                                <div class="holding-item">
+                                    <div>
+                                        <div class="holding-name">HDFC Bank</div>
+                                        <div class="holding-quantity">15 shares</div>
+                                    </div>
+                                    <div class="holding-details">
+                                        <div class="holding-value">₹21,523</div>
+                                        <div class="holding-pnl price-up">+₹567</div>
+                                    </div>
+                                </div>
+                                <div class="holding-item">
+                                    <div>
+                                        <div class="holding-name">TCS</div>
+                                        <div class="holding-quantity">5 shares</div>
+                                    </div>
+                                    <div class="holding-details">
+                                        <div class="holding-value">₹16,686</div>
+                                        <div class="holding-pnl price-down">-₹234</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    
+    <div class="buy-sell-popup" id="buySellPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h5 class="mb-0" id="popupTitle">Buy Instrument</h5>
+                <button type="button" class="btn-close btn-close-white" id="closePopup"></button>
+            </div>
+            <div class="popup-body">
+                <div id="tradeForm">
+                    <div class="mb-3">
+                        <label class="form-label">Instrument</label>
+                        <input type="text" class="form-control" id="popupInstrumentName" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Price</label>
+                        <input type="text" class="form-control" id="popupCurrentPrice" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order Type</label>
+                        <select class="form-select" id="orderType">
+                            <option>Market Order</option>
+                            <option>Limit Order</option>
+                            <option>Stop Order</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="orderQuantity" value="1" min="1">
+                    </div>
+                    <div class="mb-3" id="limitPriceContainer" style="display: none;">
+                        <label class="form-label">Limit Price (₹)</label>
+                        <input type="number" class="form-control" id="limitPrice">
+                    </div>
+                    <div class="mb-3" id="stopPriceContainer" style="display: none;">
+                        <label class="form-label">Stop Price (₹)</label>
+                        <input type="number" class="form-control" id="stopPrice">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Total Value</label>
+                        <input type="text" class="form-control" id="totalValue" readonly>
+                    </div>
+                    <div id="sellWarningPopup" class="alert alert-warning mt-3" style="display: none;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        You don't own this stock. You can only sell stocks that are in your portfolio.
+                    </div>
+                </div>
+            </div>
+            <div class="popup-footer" id="popupFooter">
+                <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                <button type="button" class="btn btn-success" id="buyBtn">Buy</button>
+                <button type="button" class="btn btn-danger" id="sellBtn" style="display: none;">Sell</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-chart-line me-2"></i>TradeMaster</h5>
+                    <p>Professional trading platform for modern investors. Trade stocks, forex, crypto and more with advanced tools and analytics.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Quick Links</h5>
+                    <div class="footer-links d-flex flex-column">
+                        <a href="index.html">Home</a>
+                        <a href="uabout.html">About</a>
+                        <a href="umarkets.html">Markets</a>
+                        <a href="utrading.html">Trading</a>
+                        <a href="uaccount.html">Account</a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Legal</h5>
+                    <div class="footer-links d-flex flex-column">
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Risk Disclosure</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>For Admin</h5>
+                    <div class="footer-links d-flex flex-column">
+                        <a href="aadmin.html">Admin Login</a>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex">
+                        <a href="#" class="me-3 text-white"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-facebook fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-linkedin fa-lg"></i></a>
+                        <a href="#" class="me-3 text-white"><i class="fab fa-instagram fa-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center py-3">
+                <p class="mb-0">&copy; 2023 TradeMaster. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+        <script>
+            window.addEventListener("load", function() {
+                const loader = document.querySelector(".loader-container");
+
+                setTimeout(() => {
+                    loader.style.opacity = "0";
+                    setTimeout(() => {
+                        loader.style.display = "none";
+                        document.body.classList.add("loaded");
+                    }, 800);
+                }, 1000);
+            });
+        </script>
+    <script>
+
+        let currentInstrument = null;
+        let currentPrice = 0;
+        let currentAction = ''; // 'buy' or 'sell'
+
+        let portfolioData = {
+            totalValue: 124567,
+            todayPL: 2345,
+            totalPL: 12456,
+            holdings: {
+                'Reliance Industries': { 
+                    quantity: 10, 
+                    value: 24156, 
+                    pnl: 1234,
+                    purchasePrice: 2200 // Average purchase price per share
+                },
+                'HDFC Bank': { 
+                    quantity: 15, 
+                    value: 21523, 
+                    pnl: 567,
+                    purchasePrice: 1300
+                },
+                'TCS': { 
+                    quantity: 5, 
+                    value: 16686, 
+                    pnl: -234,
+                    purchasePrice: 3400
+                }
+            }
+        };
+
+        window.addEventListener("load", () => {
+
+            checkForSelectedInstrument();
+
+            setupEventListeners();
+
+            updatePortfolioDisplay();
+        });
+
+        function checkForSelectedInstrument() {
+            const storedInstrument = localStorage.getItem('selectedInstrument');
+            if (storedInstrument) {
+                const instrument = JSON.parse(storedInstrument);
+                loadInstrument(instrument);
+            }
+        }
+
+        function loadInstrument(instrument) {
+
+            document.getElementById('noInstrument').style.display = 'none';
+            document.getElementById('selectedInstrument').style.display = 'block';
+            
+            document.getElementById('selectedInstrumentName').textContent = instrument.name;
+            document.getElementById('selectedInstrumentPrice').textContent = `₹${parseFloat(instrument.price).toLocaleString('en-IN')}`;
+            
+            const changeElement = document.getElementById('selectedInstrumentChange');
+            changeElement.textContent = `₹${instrument.change}`;
+            if (instrument.change.includes('+')) {
+                changeElement.className = 'instrument-change price-up';
+            } else {
+                changeElement.className = 'instrument-change price-down';
+            }
+
+            currentInstrument = instrument.name;
+            currentPrice = parseFloat(instrument.price);
+
+            checkOwnership();
+
+            calculateTotalValue();
+        }
+
+        function checkOwnership() {
+            const sellBtnMain = document.getElementById('sellBtnMain');
+            const sellWarning = document.getElementById('sellWarning');
+            
+            if (portfolioData.holdings[currentInstrument]) {
+
+                sellBtnMain.disabled = false;
+                sellBtnMain.classList.remove('sell-disabled');
+                sellWarning.style.display = 'none';
+            } else {
+
+                sellBtnMain.disabled = true;
+                sellBtnMain.classList.add('sell-disabled');
+                sellWarning.style.display = 'block';
+            }
+        }
+
+        function setupEventListeners() {
+
+            document.getElementById('buyBtnMain').addEventListener('click', function() {
+                currentAction = 'buy';
+                openTradePopup();
+            });
+
+            document.getElementById('sellBtnMain').addEventListener('click', function() {
+
+                if (portfolioData.holdings[currentInstrument]) {
+                    currentAction = 'sell';
+                    openTradePopup();
+                } else {
+
+                    document.getElementById('sellWarning').style.display = 'block';
+                }
+            });
+
+            document.getElementById('closePopup').addEventListener('click', closePopup);
+            document.getElementById('cancelBtn').addEventListener('click', closePopup);
+
+            document.getElementById('orderType').addEventListener('change', function() {
+                const orderType = this.value;
+                const limitContainer = document.getElementById('limitPriceContainer');
+                const stopContainer = document.getElementById('stopPriceContainer');
+                
+                if (orderType === 'Limit Order') {
+                    limitContainer.style.display = 'block';
+                    stopContainer.style.display = 'none';
+                } else if (orderType === 'Stop Order') {
+                    limitContainer.style.display = 'none';
+                    stopContainer.style.display = 'block';
+                } else {
+                    limitContainer.style.display = 'none';
+                    stopContainer.style.display = 'none';
+                }
+            });
+
+            document.getElementById('orderQuantity').addEventListener('input', calculateTotalValue);
+
+            document.getElementById('buyBtn').addEventListener('click', function() {
+                placeOrder('BUY');
+            });
+
+            document.getElementById('sellBtn').addEventListener('click', function() {
+                placeOrder('SELL');
+            });
+        }
+
+        function openTradePopup() {
+            if (!currentInstrument) return;
+
+            document.getElementById('popupTitle').textContent = `${currentAction === 'buy' ? 'Buy' : 'Sell'} ${currentInstrument}`;
+            document.getElementById('popupInstrumentName').value = currentInstrument;
+            document.getElementById('popupCurrentPrice').value = `₹${currentPrice.toLocaleString('en-IN')}`;
+
+            if (currentAction === 'buy') {
+                document.getElementById('buyBtn').style.display = 'block';
+                document.getElementById('sellBtn').style.display = 'none';
+                document.getElementById('sellWarningPopup').style.display = 'none';
+            } else {
+                document.getElementById('buyBtn').style.display = 'none';
+                document.getElementById('sellBtn').style.display = 'block';
+
+                if (portfolioData.holdings[currentInstrument]) {
+                    document.getElementById('sellWarningPopup').style.display = 'none';
+                    document.getElementById('sellBtn').disabled = false;
+                } else {
+                    document.getElementById('sellWarningPopup').style.display = 'block';
+                    document.getElementById('sellBtn').disabled = true;
+                }
+            }
+
+            document.getElementById('tradeForm').style.display = 'block';
+            document.getElementById('orderQuantity').value = 1;
+            calculateTotalValue();
+
+            document.getElementById('buySellPopup').classList.add('show');
+        }
+
+        function closePopup() {
+            document.getElementById('buySellPopup').classList.remove('show');
+        }
+
+        function calculateTotalValue() {
+            const quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
+            const total = quantity * currentPrice;
+            document.getElementById('totalValue').value = `₹${total.toLocaleString('en-IN')}`;
+        }
+
+        function calculatePortfolioTotalValue() {
+            let totalValue = 0;
+
+            for (const [name, holding] of Object.entries(portfolioData.holdings)) {
+
+
+                let currentHoldingPrice = currentPrice;
+
+
+                if (name === currentInstrument) {
+                    currentHoldingPrice = currentPrice;
+                } else {
+
+                    const priceChange = Math.random() * 0.1 - 0.05; // -5% to +5%
+                    currentHoldingPrice = holding.purchasePrice * (1 + priceChange);
+                }
+                
+                const holdingValue = holding.quantity * currentHoldingPrice;
+                totalValue += holdingValue;
+
+                holding.value = Math.round(holdingValue);
+                holding.pnl = Math.round(holdingValue - (holding.quantity * holding.purchasePrice));
+            }
+            
+            return totalValue;
+        }
+
+        function updatePortfolioDisplay() {
+
+            portfolioData.totalValue = Math.round(calculatePortfolioTotalValue());
+
+            document.getElementById('portfolioTotalValue').textContent = `₹${portfolioData.totalValue.toLocaleString('en-IN')}`;
+
+            const todayPLElement = document.getElementById('portfolioTodayPL');
+            todayPLElement.textContent = `₹${portfolioData.todayPL >= 0 ? '+' : ''}${portfolioData.todayPL.toLocaleString('en-IN')}`;
+            todayPLElement.className = portfolioData.todayPL >= 0 ? 'price-up' : 'price-down';
+            
+            const totalPLElement = document.getElementById('portfolioTotalPL');
+            totalPLElement.textContent = `₹${portfolioData.totalPL >= 0 ? '+' : ''}${portfolioData.totalPL.toLocaleString('en-IN')}`;
+            totalPLElement.className = portfolioData.totalPL >= 0 ? 'price-up' : 'price-down';
+
+            const holdingsContainer = document.getElementById('holdingsContainer');
+            holdingsContainer.innerHTML = '';
+            
+            for (const [name, holding] of Object.entries(portfolioData.holdings)) {
+                const holdingItem = document.createElement('div');
+                holdingItem.className = 'holding-item';
+                
+                holdingItem.innerHTML = `
+                    <div>
+                        <div class="holding-name">${name}</div>
+                        <div class="holding-quantity">${holding.quantity} shares</div>
+                    </div>
+                    <div class="holding-details">
+                        <div class="holding-value">₹${holding.value.toLocaleString('en-IN')}</div>
+                        <div class="holding-pnl ${holding.pnl >= 0 ? 'price-up' : 'price-down'}">${holding.pnl >= 0 ? '+' : ''}₹${Math.abs(holding.pnl).toLocaleString('en-IN')}</div>
+                    </div>
+                `;
+                
+                holdingsContainer.appendChild(holdingItem);
+            }
+        }
+
+        function placeOrder(side) {
+            const quantity = parseInt(document.getElementById('orderQuantity').value) || 0;
+            const totalValue = quantity * currentPrice;
+
+            if (side === 'BUY') {
+
+                if (portfolioData.holdings[currentInstrument]) {
+
+                    const existingQuantity = portfolioData.holdings[currentInstrument].quantity;
+                    const existingValue = portfolioData.holdings[currentInstrument].quantity * portfolioData.holdings[currentInstrument].purchasePrice;
+                    const newValue = existingValue + totalValue;
+                    const newQuantity = existingQuantity + quantity;
+                    
+                    portfolioData.holdings[currentInstrument].purchasePrice = newValue / newQuantity;
+                    portfolioData.holdings[currentInstrument].quantity = newQuantity;
+                } else {
+
+                    portfolioData.holdings[currentInstrument] = {
+                        quantity: quantity,
+                        purchasePrice: currentPrice,
+                        value: totalValue,
+                        pnl: 0
+                    };
+                }
+
+                portfolioData.todayPL += Math.round(totalValue * 0.01);
+                portfolioData.totalPL += Math.round(totalValue * 0.01);
+            } else {
+
+                if (portfolioData.holdings[currentInstrument]) {
+
+                    if (portfolioData.holdings[currentInstrument].quantity < quantity) {
+                        alert(`You don't have enough shares to sell. You only own ${portfolioData.holdings[currentInstrument].quantity} shares.`);
+                        return;
+                    }
+                    
+                    portfolioData.holdings[currentInstrument].quantity -= quantity;
+
+                    if (portfolioData.holdings[currentInstrument].quantity <= 0) {
+                        delete portfolioData.holdings[currentInstrument];
+                    }
+
+                    portfolioData.todayPL -= Math.round(totalValue * 0.005);
+                    portfolioData.totalPL -= Math.round(totalValue * 0.005);
+                }
+            }
+
+            updatePortfolioDisplay();
+
+            checkOwnership();
+
+            closePopup();
+        }
+    </script>
+</body>
+</html>
