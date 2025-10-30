@@ -316,6 +316,139 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        /* Search Bar Styles from Previous Code */
+        .search-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .search-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .search-input-group {
+            position: relative;
+            width: 100%;
+        }
+        
+        .search-input-group .form-control {
+            padding-left: 50px;
+            height: 50px;
+            border-radius: 8px 0 0 8px;
+            border: 1px solid #e0e0e0;
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .search-input-group .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(0, 200, 83, 0.25);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9e9e9e;
+            font-size: 1.2rem;
+            z-index: 5;
+        }
+        
+        .search-btn {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            padding: 0 25px;
+            font-weight: 600;
+            height: 50px;
+            border-radius: 0 8px 8px 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        .search-btn:hover {
+            background-color: #00b34a;
+            border-color: #00b34a;
+        }
+        
+        .search-row {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Stock Image Styles from Previous Code */
+        .stock-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .stock-name-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stock-name {
+            font-weight: 500;
+        }
+
+        /* Instrument Image Styles */
+        .instrument-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            border: 3px solid #e0e0e0;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 20px;
+            }
+            
+            .search-row {
+                flex-direction: column;
+            }
+            
+            .search-input-group .form-control {
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+            
+            .search-btn {
+                border-radius: 8px;
+                width: 100%;
+            }
+
+            .instrument-image {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .search-container {
+                padding: 15px;
+            }
+            
+            .instrument-image {
+                width: 45px;
+                height: 45px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -366,6 +499,20 @@
     
     <div class="container">
         <section class="page-section">
+            <!-- Search Bar Added Here -->
+            <div class="search-container">
+                <div class="search-title">Search Instruments</div>
+                <div class="search-row">
+                    <div class="search-input-group flex-grow-1">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search for stocks, commodities, indices...">
+                    </div>
+                    <button class="btn search-btn" id="searchButton">
+                        Search
+                    </button>
+                </div>
+            </div>
+            
             <div class="row">
                 <div class="col-md-8">
                     <div class="instrument-info" id="instrumentInfo">
@@ -376,6 +523,8 @@
                             <a href="umarkets.html" class="btn btn-primary mt-3">Go to Markets</a>
                         </div>
                         <div id="selectedInstrument" style="display: none;">
+                            <!-- Instrument Image Added Here -->
+                            <img src="" alt="Instrument" class="instrument-image" id="selectedInstrumentImage">
                             <div class="instrument-name" id="selectedInstrumentName">Reliance Industries</div>
                             <div class="instrument-price" id="selectedInstrumentPrice">₹2,415.65</div>
                             <div class="instrument-change price-up" id="selectedInstrumentChange">₹+25.50 (+1.07%)</div>
@@ -571,8 +720,7 @@
 
         let currentInstrument = null;
         let currentPrice = 0;
-        let currentAction = ''; // 'buy' or 'sell'
-
+        let currentAction = ''; 
         let portfolioData = {
             totalValue: 124567,
             todayPL: 2345,
@@ -582,7 +730,7 @@
                     quantity: 10, 
                     value: 24156, 
                     pnl: 1234,
-                    purchasePrice: 2200 // Average purchase price per share
+                    purchasePrice: 2200 
                 },
                 'HDFC Bank': { 
                     quantity: 15, 
@@ -599,6 +747,26 @@
             }
         };
 
+        
+        const instrumentImages = {
+            'Reliance Industries': 'zRELIANCE (1).webp',
+            'Tata Consultancy Services': 'zTCS.webp',
+            'HDFC Bank': 'zHDFCBANK.webp',
+            'Infosys': 'zINFY.webp',
+            'ICICI Bank': 'zICICIBANK.webp',
+            'Hindustan Unilever': 'zHINDUNILVR.webp',
+            'ITC Limited': 'zITC_1.webp',
+            'State Bank of India': 'zSBIN.webp',
+            'Gold (10g)': 'zGOLDM.webp',
+            'Silver (1kg)': 'zSILVERM.webp',
+            'Crude Oil': 'zCRUDEOIL.webp',
+            'Natural Gas': 'zNATURALGAS_New.webp',
+            'Copper': 'zdownload.png',
+            'Zinc': 'zinc.png',
+            'Aluminium': 'zalu.png',
+            'Lead': 'zdownload (1).png'
+        };
+
         window.addEventListener("load", () => {
 
             checkForSelectedInstrument();
@@ -606,7 +774,30 @@
             setupEventListeners();
 
             updatePortfolioDisplay();
+
+            setupSearchFunctionality();
         });
+
+        function setupSearchFunctionality() {
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            
+            searchButton.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                
+                if (searchTerm) {
+                    alert(`Searching for: ${searchTerm}`);
+                    searchInput.value = '';
+                }
+            }
+        }
 
         function checkForSelectedInstrument() {
             const storedInstrument = localStorage.getItem('selectedInstrument');
@@ -630,6 +821,17 @@
                 changeElement.className = 'instrument-change price-up';
             } else {
                 changeElement.className = 'instrument-change price-down';
+            }
+
+            // Set instrument image
+            const imageElement = document.getElementById('selectedInstrumentImage');
+            const imagePath = instrumentImages[instrument.name];
+            if (imagePath) {
+                imageElement.src = imagePath;
+                imageElement.alt = instrument.name;
+            } else {
+                // Fallback if no image found
+                imageElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMzAiIGZpbGw9IiNlMGUwZTAiLz4KPHBhdGggZD0iTTMwIDMyQzMxLjY1NjkgMzIgMzMgMzAuNjU2OSAzMyAyOUMzMyAyNy4zNDMxIDMxLjY1NjkgMjYgMzAgMjZDMjguMzQzMSAyNiAyNyAyNy4zNDMxIDI3IDI5QzI3IDMwLjY1NjkgMjguMzQzMSAzMiAzMCAzMloiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTM5IDIxSDM2VjM5SDM5VjIxWiIgZmlsbD0iIzk5OTk5OSIvPgo8cGF0aCBkPSJNMjEuNSAzOVYyMUwxOS41IDMxLjVWMzlIMjEuNVoiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTQzLjUgMzEuNUwzOSAyMVYzOUg0My41VjMxLjVaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo=';
             }
 
             currentInstrument = instrument.name;
@@ -704,6 +906,14 @@
             document.getElementById('sellBtn').addEventListener('click', function() {
                 placeOrder('SELL');
             });
+
+            // Image error handling from previous code
+            const images = document.querySelectorAll('.instrument-image');
+            images.forEach(img => {
+                img.onerror = function() {
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMzAiIGZpbGw9IiNlMGUwZTAiLz4KPHBhdGggZD0iTTMwIDMyQzMxLjY1NjkgMzIgMzMgMzAuNjU2OSAzMyAyOUMzMyAyNy4zNDMxIDMxLjY1NjkgMjYgMzAgMjZDMjguMzQzMSAyNiAyNyAyNy4zNDMxIDI3IDI5QzI3IDMwLjY1NjkgMjguMzQzMSAzMiAzMCAzMloiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTM5IDIxSDM2VjM5SDM5VjIxWiIgZmlsbD0iIzk5OTk5OSIvPgo8cGF0aCBkPSJNMjEuNSAzOVYyMUwxOS41IDMxLjVWMzlIMjEuNVoiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTQzLjUgMzEuNUwzOSAyMVYzOUg0My41VjMxLjVaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo=';
+                };
+            });
         }
 
         function openTradePopup() {
@@ -760,7 +970,7 @@
                     currentHoldingPrice = currentPrice;
                 } else {
 
-                    const priceChange = Math.random() * 0.1 - 0.05; // -5% to +5%
+                    const priceChange = Math.random() * 0.1 - 0.05; 
                     currentHoldingPrice = holding.purchasePrice * (1 + priceChange);
                 }
                 
