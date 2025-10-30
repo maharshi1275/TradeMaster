@@ -109,6 +109,8 @@
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             margin-right: 15px;
+            display: block;
+            margin-bottom: 8px;
         }
         
         .footer-links a:hover {
@@ -414,6 +416,20 @@
             display: block;
         }
         
+        .footer-col {
+            margin-bottom: 30px;
+        }
+        
+        .footer-admin-section {
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-social-section {
+            padding-left: 20px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
         @media (max-width: 768px) {
             .search-container {
                 padding: 20px;
@@ -655,13 +671,14 @@
     <footer class="mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4 mb-4">
+                <div class="col-md-3 footer-col">
                     <h5><i class="fas fa-chart-line me-2"></i>TradeMaster</h5>
-                    <p>Professional trading platform for modern investors. Trade stocks, forex, crypto and more with advanced tools and analytics.</p>
+                    <p>Professional trading platform for modern investors. Trade Indian stocks, ETFs, and commodities with
+                        advanced tools and real-time analytics.</p>
                 </div>
-                <div class="col-md-2 mb-4">
+                <div class="col-md-2 footer-col">
                     <h5>Quick Links</h5>
-                    <div class="footer-links d-flex flex-column">
+                    <div class="footer-links">
                         <a href="index.html">Home</a>
                         <a href="umarkets.html">Markets</a>
                         <a href="utrading.html">Trading</a>
@@ -669,24 +686,24 @@
                         <a href="uabout.html">About</a>
                     </div>
                 </div>
-                <div class="col-md-3 mb-4">
+                <div class="col-md-2 footer-col">
                     <h5>Legal</h5>
-                    <div class="footer-links d-flex flex-column">
+                    <div class="footer-links">
                         <a href="#">Terms of Service</a>
                         <a href="#">Privacy Policy</a>
                         <a href="#">Risk Disclosure</a>
                         <a href="#">Cookie Policy</a>
                     </div>
                 </div>
-                <div class="col-md-2 mb-4">
+                <div class="col-md-2 footer-col footer-admin-section">
                     <h5>For Admin</h5>
-                    <div class="footer-links d-flex flex-column">
+                    <div class="footer-links">
                         <a href="aadmin.html">Admin Login</a>
                     </div>
                 </div>
-                <div class="col-md-3 mb-4">
+                <div class="col-md-3 footer-col footer-social-section">
                     <h5>Connect With Us</h5>
-                    <div class="d-flex">
+                    <div class="d-flex mt-3">
                         <a href="#" class="me-3 text-white"><i class="fab fa-twitter fa-lg"></i></a>
                         <a href="#" class="me-3 text-white"><i class="fab fa-facebook fa-lg"></i></a>
                         <a href="#" class="me-3 text-white"><i class="fab fa-linkedin fa-lg"></i></a>
@@ -823,14 +840,14 @@
                 changeElement.className = 'instrument-change price-down';
             }
 
-            // Set instrument image
+            
             const imageElement = document.getElementById('selectedInstrumentImage');
             const imagePath = instrumentImages[instrument.name];
             if (imagePath) {
                 imageElement.src = imagePath;
                 imageElement.alt = instrument.name;
             } else {
-                // Fallback if no image found
+                
                 imageElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIiByeD0iMzAiIGZpbGw9IiNlMGUwZTAiLz4KPHBhdGggZD0iTTMwIDMyQzMxLjY1NjkgMzIgMzMgMzAuNjU2OSAzMyAyOUMzMyAyNy4zNDMxIDMxLjY1NjkgMjYgMzAgMjZDMjguMzQzMSAyNiAyNyAyNy4zNDMxIDI3IDI5QzI3IDMwLjY1NjkgMjguMzQzMSAzMiAzMCAzMloiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTM5IDIxSDM2VjM5SDM5VjIxWiIgZmlsbD0iIzk5OTk5OSIvPgo8cGF0aCBkPSJNMjEuNSAzOVYyMUwxOS41IDMxLjVWMzlIMjEuNVoiIGZpbGw9IiM5OTk5OTkiLz4KPHBhdGggZD0iTTQzLjUgMzEuNUwzOSAyMVYzOUg0My41VjMxLjVaIiBmaWxsPSIjOTk5OTk5Ii8+Cjwvc3ZnPgo=';
             }
 
@@ -907,7 +924,7 @@
                 placeOrder('SELL');
             });
 
-            // Image error handling from previous code
+            
             const images = document.querySelectorAll('.instrument-image');
             images.forEach(img => {
                 img.onerror = function() {
@@ -1076,4 +1093,3 @@
     </script>
 </body>
 </html>
-
