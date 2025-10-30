@@ -191,6 +191,7 @@
             text-align: center;
             transition: all 0.3s ease;
             height: 100%;
+            margin-bottom: 20px;
         }
 
         .index-card:hover {
@@ -233,6 +234,30 @@
         .footer-social-section {
             padding-left: 20px;
             border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .index-value {
+                font-size: 1.5rem;
+            }
+            
+            .index-name {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .index-value {
+                font-size: 1.3rem;
+            }
+            
+            .index-name {
+                font-size: 1rem;
+            }
+            
+            .index-change {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -322,28 +347,28 @@
             <div class="indices-section">
                 <h2 class="page-title text-center">Market Overview</h2>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="index-card">
                             <div class="index-name">NIFTY 50</div>
                             <div class="index-value">22,415.65</div>
                             <div class="index-change price-up">+0.85% <i class="fas fa-arrow-up"></i></div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="index-card">
                             <div class="index-name">BANK NIFTY</div>
                             <div class="index-value">48,210.35</div>
                             <div class="index-change price-down">-0.42% <i class="fas fa-arrow-down"></i></div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="index-card">
                             <div class="index-name">SENSEX</div>
                             <div class="index-value">73,895.54</div>
                             <div class="index-change price-up">+0.76% <i class="fas fa-arrow-up"></i></div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 mb-3">
                         <div class="index-card">
                             <div class="index-name">GIFT NIFTY</div>
                             <div class="index-value">22,530.80</div>
@@ -355,7 +380,7 @@
         </section>
     </div>
 
-    
+
     <footer class="mt-5">
         <div class="container">
             <div class="row">
@@ -406,23 +431,20 @@
         </div>
     </footer>
 
-    
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
   <script>
     window.addEventListener("load", function() {
       const loader = document.querySelector(".loader-container");
-      const mainContent = document.getElementById("main-content");
 
       setTimeout(() => {
         loader.style.opacity = "0";
         setTimeout(() => {
           loader.style.display = "none";
-          mainContent.style.display = "block";
           document.body.classList.add("loaded");
-        }, 800); // wait for fade out
-      }, 1000); // show loader for 2 seconds
+        }, 800);
+      }, 1000);
     });
   </script>
 </body>
